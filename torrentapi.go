@@ -36,13 +36,43 @@ const (
 	imdbNotFound     = 10
 )
 
+type Category int
+
+// Torrent categories
+const (
+	CategoryXXX             Category = 4
+	CategoryMoviesXvid               = 14
+	CategoryMoviesX264               = 17
+	CategoryTVEpisodes               = 18
+	CategoryMusicMP3                 = 23
+	CategoryMusicFLAC                = 25
+	CategoryGamesPCISO               = 27
+	CategoryGamesPCRIP               = 28
+	CategoryGamesXbox360             = 32
+	CategorySoftwarePCISO            = 33
+	CategoryGamesPS3                 = 40
+	CategoryTVHDEpisodes             = 41
+	CategoryMoviesFullBD             = 42
+	CategoryMoviesX2641080           = 44
+	CategoryMoviesX264720            = 45
+	CategoryMoviesBDRemux            = 46
+	CategoryMoviesX2643D             = 47
+	CategoryMoviesXvid720            = 48
+	CategoryTVUHDEpisodes            = 49
+	CategoryMoviesX2644K             = 50
+	CategoryMoviesX2654K             = 51
+	CategoryMoviesX2654KHDR          = 52
+	CategoryGamesPS4                 = 53
+	CategoryMoviesX2651080           = 54
+)
+
 // Token keeps token and it's expiration date.
 type Token struct {
 	Token   string    `json:"token"`
 	Expires time.Time `json:"-"`
 }
 
-// EpisodeInfo keepsinformation from "episode_info" key from results. Some of the fields may be empty.
+// EpisodeInfo keeps information from "episode_info" key from results. Some of the fields may be empty.
 type EpisodeInfo struct {
 	ImDB       string `json:"imdb"`
 	TvDB       string `json:"tvdb"`
@@ -387,4 +417,59 @@ func New(appID string, opts ...Option) (*API, error) {
 	a.APIToken = token
 	a.initQuery()
 	return a, err
+}
+
+func (c Category) String() string {
+	switch c {
+	case CategoryXXX:
+		return "XXX (+18)"
+	case CategoryMoviesXvid:
+		return "Movies/XVID"
+	case CategoryMoviesX264:
+		return "Movies/x264"
+	case CategoryTVEpisodes:
+		return "TV Episodes"
+	case CategoryMusicMP3:
+		return "Music/MP3"
+	case CategoryMusicFLAC:
+		return "Music/FLAC"
+	case CategoryGamesPCISO:
+		return "Games/PC ISO"
+	case CategoryGamesPCRIP:
+		return "Games/PC RIP"
+	case CategoryGamesXbox360:
+		return "Games/XBOX-360"
+	case CategorySoftwarePCISO:
+		return "Software/PC ISO"
+	case CategoryGamesPS3:
+		return "Games/PS3"
+	case CategoryTVHDEpisodes:
+		return "TV HD Episodes"
+	case CategoryMoviesFullBD:
+		return "Movies/Full BD"
+	case CategoryMoviesX2641080:
+		return "Movies/x264/1080"
+	case CategoryMoviesX264720:
+		return "Movies/x264/720"
+	case CategoryMoviesBDRemux:
+		return "Movies/BD Remux"
+	case CategoryMoviesX2643D:
+		return "Movies/x264/3D"
+	case CategoryMoviesXvid720:
+		return "Movies/XVID/720"
+	case CategoryTVUHDEpisodes:
+		return "TV UHD Episodes"
+	case CategoryMoviesX2644K:
+		return "Movies/x264/4K"
+	case CategoryMoviesX2654K:
+		return "Movies/x265/4K"
+	case CategoryMoviesX2654KHDR:
+		return "Movies/x265/4K/HDR"
+	case CategoryGamesPS4:
+		return "Games/PS4"
+	case CategoryMoviesX2651080:
+		return "Movies/X265/1080"
+	default:
+		return "unknown"
+	}
 }
