@@ -125,7 +125,7 @@ type API struct {
 	client          *http.Client
 	Query           string
 	APIToken        Token
-	categories      []int
+	categories      []string
 	appID           string
 	reqDelay        time.Duration
 	tokenExpiration time.Duration
@@ -140,8 +140,20 @@ func (a *API) SearchString(query string) *API {
 }
 
 // Category adds category to search query.
-func (a *API) Category(category int) *API {
-	a.categories = append(a.categories, category)
+func (a *API) Category(category Category) *API {
+	a.categories = append(a.categories, strconv.Itoa(int(category)))
+	return a
+}
+
+// Filter for tv shows
+func (a *API) TV() *API {
+	a.categories = append(a.categories, "tv")
+	return a
+}
+
+// Filter for movies
+func (a *API) Movies() *API {
+	a.categories = append(a.categories, "movies")
 	return a
 }
 
@@ -238,11 +250,7 @@ func (a *API) call() (TorrentResults, error) {
 		}
 	}
 	if len(a.categories) > 0 {
-		categories := make([]string, len(a.categories))
-		for i, c := range a.categories {
-			categories[i] = strconv.Itoa(c)
-		}
-		a.Query += fmt.Sprintf("&category=%s", strings.Join(categories, ";"))
+		a.Query += fmt.Sprintf("&category=%s", strings.Join(a.categories, ";"))
 	}
 	query := fmt.Sprintf("%s&token=%s%s&app_id=%s", a.url, a.APIToken.Token, a.Query, a.appID)
 	apiResponse, err := a.getResults(query)
